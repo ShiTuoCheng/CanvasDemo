@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,body {
+            margin:0;
+            overflow:hidden;
+            width:100%;
+            height:100%;
+            cursor:none;
+            background:black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+    let canvas = document.getElementById('canvas');
+    let context = canvas.getContext("2d");
+    const WIDTH = document.documentElement.clientWidth;
+    const HEIGHT = document.documentElement.clientHeight;
+    const roundNum = 100;
+    const rounds = [];
+
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    class RoundItem{
+
+        constructor(index, x, y){
+
+            this.index = index;
+            this.x = x;
+            this.y = y;
+            this.radius = Math.random()*2 + 1;
+            const alpha = (Math.floor(Math.random() * 10) + 1) / 10 / 2;
+            this.color = 'rgba(255, 255, 255, ' + alpha + ')'
+        }
+
+        draw() {
+
+            context.fillStyle = this.color;
+            context.shadowBlur = this.radius * 2;
+            context.beginPath();
+            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+            context.closePath();
+            context.fill();
+        }
+
+        move() {
+
+            this.y -= 1;
+            if (this.y <= -10) {
+                this.y = HEIGHT + 10;
+            }
+
+            this.draw();
+        }
+    }
+
+    const init = () => {
+        for(let i = 0; i < roundNum; i++) {
+            rounds.push(new RoundItem(i,Math.random() * WIDTH,Math.random() * HEIGHT));
+            rounds[i].draw();
+        }
+
+        animate();
+    }
+
+    const animate = () => {
+        context.clearRect(0, 0, WIDTH, HEIGHT);
+        for (const item of rounds) {
+            item.move();
+        }
+
+        window.requestAnimationFrame(animate);
+    }
+
+    init();
+
+
+    // let cx = canvas.width = 400;
+    // let cy = canvas.height = 400;
+
+    // context.beginPath();
+    // context.arc(100, 100, 20, 0, Math.PI*
+    // 1.5, true);
+    // context.closePath();
+    // context.fillStyle = 'rgb(255,255,255)';
+    // context.fill();
+    // context.strokeStyle = 'white';
+    // context.stroke();
+    // context.closePath();
+
+    // context.beginPath();
+
+    // context.strokeStyle = "#fff";
+    // context.shadowBlur = 20;
+    // context.shadowColor = '#fff';
+    // context.rotate(20*Math.PI/180);
+    // context.fillRect(100, 100, 200, 50);
+
+    // context.closePath();
+
+    // context.strokeStyle = '#fff';
+    // context.strokeRect(100, 100, 200, 50);
+    // context.closePath();
+    // context.lineTo(50, 50);
+    // context.lineTo(150, 100);
+    // context.lineTo(150, 200);
+    // context.lineWidth = 10;
+    // context.lineCap = 'round';
+    // context.closePath();
+    // context.strokeStyle = 'white';
+    // context.stroke();
+</script>
+</html>

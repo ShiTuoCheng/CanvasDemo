@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loading</title>
+    <style>
+        html,body {
+            margin:0;
+            overflow:hidden;
+            width:100%;
+            height:100%;
+            cursor:none;
+            background:black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const WIDTH = document.documentElement.clientWidth;
+    const HEIGHT = document.documentElement.clientHeight;
+
+    const para = 5
+    const rounds = [];
+
+    class RoundItem{
+
+        constructor(x, radius) {
+
+            this.x = x;
+            this.radius = radius
+        }
+
+        draw() {
+            context.beginPath();
+            context.fillStyle = "white";
+            context.shadowBlur = "20";
+            context.shadowColor = "#fff";
+            context.arc(this.x, 100, this.radius, 0, Math.PI*2, false);
+
+            context.fill();
+            context.closePath();
+        }
+
+        loading() {
+            
+            if(this.radius > 0.5){
+
+                this.radius -= 0.5
+            }else{
+                this.radius += 6
+            }
+            this.draw();
+        }
+    }
+
+    for (let i = 0; i < 3; i++) {
+
+        rounds.push(new RoundItem(100 + i * 20, 5));
+
+        rounds[i].draw()
+
+    }
+
+
+    const animate = () => {
+
+        context.clearRect(0, 0, WIDTH, HEIGHT);
+
+        for (const RoundItem of rounds) {
+            RoundItem.loading()
+        }
+
+        window.requestAnimationFrame(animate);
+    }
+
+    animate();
+
+</script>
+</html>
